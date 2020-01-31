@@ -1,1 +1,0 @@
-raspivid -o - -t 0 -rot 270 -w 1920 -h 1080 -fps 25 -b 6000000 -g 50 |cvlc -vvv stream:///dev/stdin --sout '#rtp{sdp=rtsp://:8554/}' :demux=h264

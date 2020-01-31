@@ -1,0 +1,22 @@
+{
+  "name": "video-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^7.1.10"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-ws": "^4.0.0",
+    "pi-camera-connect": "^0.2.0",
+    "raspivid-stream": "^0.2.1",
+    "ws": "^7.2.1"
+  }
+}

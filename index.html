@@ -5,15 +5,18 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <link rel="stylesheet" href="./styles.css">
     <title>Hello World!</title>
   </head>
   <body>
 
-    <content>
-      <div class="video-container">
-        <video id="video" autoplay></video>
-      </div>
-    </content>
+    <div id="video-container" class="video-container">
+      <video id="video" autoplay></video>
+    </div>
+    <div class="control-container">
+      <button id="record-start">Record</button>
+      <button id="record-stop">Stop</button>
+    </div>
 
 
 

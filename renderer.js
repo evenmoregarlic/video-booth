@@ -5,6 +5,7 @@
 // selectively enable features needed in the rendering
 // process.
 
+const {ipcRenderer} = require('electron');
 
 // Grab elements, create settings, etc.
 var video = document.getElementById('video');
@@ -20,4 +21,7 @@ if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
 }
 
-console.log("hi?")
+document.getElementById("record-button").onclick = function record() {
+    console.log("recording!");
+}
+

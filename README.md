@@ -7,3 +7,10 @@ ssh onto it from vscode and see it work using vnc.
 
 ## What are we doing
 Electron app will send "record" to server, whch will do stuff. After it's done, send 'record finished' message back. OR we can use the `ipcRenderer.invoke` method which takes a callback. 
+
+
+## Installation
+
+Running on mac: `npm install --arch=x64`
+
+Running on raspbian: `npm install --arch=armvl7` (or whatever the output of `uname -m` is)

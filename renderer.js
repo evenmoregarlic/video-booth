@@ -23,5 +23,7 @@ if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
 document.getElementById("record-button").onclick = function record() {
     console.log("recording!");
+
+    ipcRenderer.send('record-event', 'ping')
 }
 

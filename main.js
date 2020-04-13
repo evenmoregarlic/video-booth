@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, ipcMain} = require('electron')
 const path = require('path')
 
 function createWindow () {
@@ -19,6 +19,9 @@ function createWindow () {
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 }
+
+// Config to stop deprecation message
+app.allowRendererProcessReuse = true;
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -40,3 +43,9 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+ipcMain.on('record-event', (event, args) => {
+  console.log("got record event")
+  console.log(`event contains ${event}, ${args}`)
+  console.log(event)
+})

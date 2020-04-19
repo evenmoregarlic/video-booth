@@ -1,0 +1,2 @@
+NOW=$(date +%Y-%m-%d-%H-%M-%S)
+raspivid -o - -t 10000 -w 1920 -h 1080 -fps 25 -b 6000000 -rot 270 -g 50 -p 10,10,400,225 | ffmpeg -use_wallclock_as_timestamps 1 -thread_queue_size 10240 -f h264 -r 25 -i pipe: -f alsa -thread_queue_size 10240 -ac 1 -i plughw:CARD=MIC,DEV=0 -af "adelay=1000" -vcodec copy -acodec aac -ar 44100 -ab 256k  /home/pi/Desktop/$NOW.mp4

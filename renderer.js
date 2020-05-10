@@ -10,6 +10,9 @@ const {ipcRenderer} = require('electron');
 // Grab elements, create settings, etc.
 var video = document.getElementById('video');
 
+let recorder;
+let recordedChunks = [];
+
 // const windowWidth = document.getElementById('video-container').offsetWidth;
 // const windowHeight = document.getElementById('video-container').offsetHeight;
 
@@ -24,14 +27,77 @@ if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         //video.src = window.URL.createObjectURL(stream);
         video.srcObject = stream;
         video.play();
+
+
+        initRecorder(stream)
     });
 
 }
 
 
 document.getElementById('record-start').onclick = function record() {
-    ipcRenderer.send('record', 'start');
+    // ipcRenderer.send('record', 'start');
+    startRecorder()
 }
 
 document.getElementById('record-stop').onclick = () => ipcRenderer.send('record', 'stop');
 
+function initRecorder(stream) {
+    var options = { mimeType: "video/webm; codecs=vp9" };
+    recorder = new MediaRecorder(stream, options)
+    recorder.ondataavailable = handleDataAvailable;
+}
+
+function handleDataAvailable(event) {
+    console.log("data-available");
+    if (event.data.size > 0) {
+      recordedChunks.push(event.data);
+      console.log(recordedChunks);
+      download();
+    } else {
+      // ...
+    }
+}
+
+function startRecorder() {
+    console.log('recording!')
+    if (recorder) {
+        recorder.start()
+    }
+
+    // demo: to download after 9sec
+    setTimeout(() => {
+        console.log("stopping");
+        recorder.stop();
+    }, 3000);
+}
+
+ipcRenderer.on('download-reply', (event, arg) => {
+    console.log(arg)
+})
+
+function download() {
+
+    const reader = new FileReader()
+
+    reader.onload = () => {
+        const b64 = reader.result.replace(/^data:.+;base64,/, '');
+        ipcRenderer.send('download', {
+            data: b64
+        })
+    }
+
+    reader.readAsDataURL(recordedChunks[0]);
+
+    // var blob = new Blob(recordedChunks, {
+    //   type: "video/webm"
+    // });
+    // var url = URL.createObjectURL(blob);
+    // var a = document.createElement("a");
+    // document.body.appendChild(a);
+    // a.style = "display: none";
+    // a.href = url;
+    // a.download = "test.webm";
+    // a.click();
+    // window.URL.revokeObjectURL(url);
+  }

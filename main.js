@@ -1,6 +1,7 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, ipcMain} = require('electron')
 const path = require('path')
+const fs = require('fs')
 
 require('./lib/ipc.js')
 
@@ -39,6 +40,19 @@ app.on('activate', function () {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) createWindow()
+})
+
+ipcMain.on('download', (event, args) => {
+
+  var buff = new Buffer.from(args.data, 'base64');
+  fs.writeFile("test.webm", buff, (err) => {
+    if (err) {
+      event.reply('download-reply', 'NO')
+    } else {
+      event.reply('download-reply', 'OK')
+    }
+  })
+
 })
 
 

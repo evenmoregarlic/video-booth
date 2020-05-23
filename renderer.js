@@ -47,6 +47,7 @@ function initRecorder(stream) {
     var options = { mimeType: "video/webm; codecs=vp9" };
     recorder = new MediaRecorder(stream, options)
     recorder.ondataavailable = handleDataAvailable;
+    return stream
 }
 
 function handleDataAvailable(event) {
@@ -64,13 +65,15 @@ function startRecorder() {
     console.log('recording!')
     if (recorder) {
         recorder.start()
-    }
 
-    // demo: to download after 9sec
-    setTimeout(() => {
-        console.log("stopping");
-        recorder.stop();
-    }, 3000);
+        // demo: to download after 9sec
+        setTimeout(() => {
+            console.log("stopping");
+            recorder.stop();
+        }, 3000);
+    } else {
+        console.log('no recorder, doing nothing')
+    }
 }
 
 ipcRenderer.on('download-reply', (event, arg) => {
@@ -89,16 +92,4 @@ function download() {
     }
 
     reader.readAsDataURL(recordedChunks[0]);
-
-    // var blob = new Blob(recordedChunks, {
-    //   type: "video/webm"
-    // });
-    // var url = URL.createObjectURL(blob);
-    // var a = document.createElement("a");
-    // document.body.appendChild(a);
-    // a.style = "display: none";
-    // a.href = url;
-    // a.download = "test.webm";
-    // a.click();
-    // window.URL.revokeObjectURL(url);
   }

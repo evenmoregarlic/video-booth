@@ -11,7 +11,7 @@ function createWindow () {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, 'public/preload.js'),
       nodeIntegration:true,
     }
   })
@@ -42,17 +42,22 @@ app.on('activate', function () {
   if (BrowserWindow.getAllWindows().length === 0) createWindow()
 })
 
-ipcMain.on('download', (event, args) => {
+/*
+* IPC handlers
+*/
+ipcMain.on('download', saveVideoStreamToFile);
 
+
+
+
+function saveVideoStreamToFile(event, args) {
+  console.log('saving')
   var buff = new Buffer.from(args.data, 'base64');
   fs.writeFile("test.webm", buff, (err) => {
     if (err) {
       event.reply('download-reply', 'NO')
     } else {
-      event.reply('download-reply', 'OK')
+      event.reply('download-reply', err)
     }
-  })
-
-})
-
-
+  });
+}

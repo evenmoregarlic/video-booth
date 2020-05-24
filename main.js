@@ -3,7 +3,7 @@ const {app, BrowserWindow, ipcMain} = require('electron')
 const path = require('path')
 const fs = require('fs')
 
-require('./lib/ipc.js')
+// require('./lib/ipc.js')
 
 function createWindow () {
   // Create the browser window.

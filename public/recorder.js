@@ -5,8 +5,10 @@
 
 const {ipcRenderer} = require('electron');
 
-let recorder;
+var recorder;
 let recordedChunks = [];
+
+var recorderCreatedEvent = new Event('recorder-created')
 
 /**
  * Event handlers
@@ -30,6 +32,7 @@ function initRecorder(stream) {
     var options = { mimeType: "video/webm; codecs=h264" };
     recorder = new MediaRecorder(stream, options)
     recorder.ondataavailable = handleDataAvailable;
+    window.dispatchEvent(recorderCreatedEvent);
     return stream
 }
 
@@ -62,18 +65,22 @@ function uploadToMain() {
 }
 
 function startRecorder() {
-    console.log('recording!')
-    if (recorder) {
-        recorder.start()
-
-        // demo: to download after 3sec
-        setTimeout(() => {
-            console.log("stopping");
-            recorder.stop();
-        }, 3000);
-    } else {
-        console.warn('no recorder, doing nothing')
+    if (!recorder) {
+        console.log('no recorder, doing nothing')
+        return
     }
+
+    if (recorder.state != 'inactive') {
+        console.log('recorder paused or active, doing nothing')
+    }
+
+    recorder.start()
+
+    // demo: to download after 3sec
+    setTimeout(() => {
+        console.log("stopping");
+        recorder.stop();
+    }, 3000);
 }
 
 function stopRecorder() {

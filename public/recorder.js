@@ -81,9 +81,10 @@ function stopRecorder() {
 }
 
 function handleUploadReply(event, arg) {
-    if (arg != 'OK') {
+    if (arg.success) {
         console.log('video saved successfully')
+        recordedChunks.shift() // remove the chunk that we've successfully saved
     } else {
-        console.log('error saving video: ${arg}')
+        console.log('error saving video: ${arg.error}')
     }
 }

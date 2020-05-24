@@ -47,17 +47,19 @@ app.on('activate', function () {
 */
 ipcMain.on('download', saveVideoStreamToFile);
 
-
-
-
 function saveVideoStreamToFile(event, args) {
-  console.log('saving')
   var buff = new Buffer.from(args.data, 'base64');
-  fs.writeFile("test.webm", buff, (err) => {
+  const filename = `test-${Date.now()}.webm`;
+  fs.writeFile(filename, buff, (err) => {
     if (err) {
-      event.reply('download-reply', 'NO')
+      event.reply('download-reply', {
+        success: false,
+        error: err,
+      });
     } else {
-      event.reply('download-reply', err)
+      event.reply('download-reply', {
+        success: true
+      });
     }
   });
 }

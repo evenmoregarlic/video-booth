@@ -8,29 +8,38 @@
   const recordButton = document.getElementById('record-start');
   const stopButton = document.getElementById('record-stop');
 
-  window.addEventListener('recorder-created', recorderCreated)
   /**
    * Event handlers
    */
-
-  recordButton.addEventListener('click', () => {
-    recordStatus.removeAttribute('hidden');
-    recordButton.setAttribute('disabled', true)
-  });
-
-  stopButton.addEventListener('click', () => {
-    recordStatus.setAttribute('hidden', true);
-    recordButton.removeAttribute('disabled')
-  });
+  
+  window.addEventListener('recorder-created', recorderCreated);
+  recordButton.addEventListener('click', showRecordingState);
+  stopButton.addEventListener('click', showNotRecordingState);
 
 
   function recorderCreated() {
-    recorder.addEventListener('stop', recorderStopped)
+    recorder.addEventListener('stop', showNotRecordingState)
   }
 
-  function recorderStopped() {
-    recordButton.removeAttribute('disabled')
+  function showNotRecordingState() {
+    if (recordButton.hasAttribute('hidden')) {
+      recordButton.removeAttribute('hidden')
+    }
+
+    stopButton.setAttribute('hidden', true);
     recordStatus.setAttribute('hidden', true);
+  }
+
+  function showRecordingState() {
+    if (stopButton.hasAttribute('hidden')) {
+      stopButton.removeAttribute('hidden');
+    }
+
+    if (recordStatus.hasAttribute('hidden')) {
+      recordStatus.removeAttribute('hidden')
+    }
+
+    recordButton.setAttribute('hidden', true)
   }
 
 })();

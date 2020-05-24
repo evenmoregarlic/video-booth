@@ -11,6 +11,16 @@ let recordedChunks = [];
 var recorderCreatedEvent = new Event('recorder-created')
 
 /**
+ * Mime types, should be in order of preference.
+ */
+var types = [
+    "video/webm\;codecs=h264",
+    "video/webm",
+    "video/mpeg",
+    "video/mp4",
+];
+
+/**
  * Event handlers
  */
 document.getElementById('record-start').addEventListener('click', startRecorder);
@@ -25,13 +35,16 @@ ipcRenderer.on('download-reply', handleUploadReply);
 /**
  * Called from mediaSelector.js
  * 
- * Initialise a MediaRecorder with the mediaStream
- * @param {C} stream 
+ * Initialise a MediaRecorder with the mediaStream and a compatible mime type.
  */
 function initRecorder(stream) {
-    var options = { mimeType: "video/webm; codecs=h264" };
+    const firstCompatibleMimeType = types.find(t => MediaRecorder.isTypeSupported(t))
+    console.log(`using mime type ${firstCompatibleMimeType}`);
+    var options = { mimeType: firstCompatibleMimeType };
+
     recorder = new MediaRecorder(stream, options)
     recorder.ondataavailable = handleDataAvailable;
+
     window.dispatchEvent(recorderCreatedEvent);
     return stream
 }
@@ -39,8 +52,6 @@ function initRecorder(stream) {
 /**
  * Do something when there are chunks available to send.
  * Each chunk is one video
- * 
- * TODO handle removing chunks once a video has been uploaded.
  */
 function handleDataAvailable(event) {
     if (event.data.size > 0) {
@@ -95,3 +106,13 @@ function handleUploadReply(event, arg) {
         console.log('error saving video: ${arg.error}')
     }
 }
+
+
+/**
+ * Check which mime types are supported
+ */
+
+
+for (var i in types) { 
+    console.log(`Is ${types[i]} supported? ${MediaRecorder.isTypeSupported(types[i]) ? "Maybe" : "No"}`);
+};

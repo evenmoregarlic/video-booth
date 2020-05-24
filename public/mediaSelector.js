@@ -27,7 +27,7 @@ function gotDevices(deviceInfos) {
       option.text = deviceInfo.label || `microphone ${audioInputSelect.length + 1}`;
       audioInputSelect.appendChild(option);
     } else if (deviceInfo.kind === 'audiooutput') {
-      console.log('audio output, not needed.')
+      console.debug('audio output, not needed.')
     } else if (deviceInfo.kind === 'videoinput') {
       option.text = deviceInfo.label || `camera ${videoSelect.length + 1}`;
       videoSelect.appendChild(option);

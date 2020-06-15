@@ -1,9 +1,10 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, ipcMain} = require('electron')
-const path = require('path')
-const fs = require('fs')
+const {app, BrowserWindow, ipcMain} = require('electron');
+const path = require('path');
+const fs = require('fs');
 
 // require('./lib/ipc.js')
+require('./fileTransformer');
 
 function createWindow () {
   // Create the browser window.
@@ -14,7 +15,7 @@ function createWindow () {
       preload: path.join(__dirname, 'public/preload.js'),
       nodeIntegration:true,
     }
-  })
+  });
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
